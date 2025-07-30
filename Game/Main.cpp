@@ -1,10 +1,10 @@
 #include <iostream>
-#include "Engine.h"
+#include "Game/Game.h"
 //ÁøÀÔÁ¡
 int main()
 {
-	Engine engine;
-	engine.Run();
-
+	Game game;
+	game.Run();
+	
 	//std::cout << "Test";
 }

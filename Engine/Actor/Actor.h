@@ -60,7 +60,7 @@ public:
 	//게임 종료 요청
 	void QuitGame();
 
-private:
+protected:
 	//개체의 위치
 	Vector2 position;
 

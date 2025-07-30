@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <iostream>
 #include "Engine.h"
+#include "Level/Level.h"
 #include "Utils/Utils.h"
 
 Actor::Actor(const char* image,Color color, const Vector2& position) :color(color) , position(position)
@@ -54,10 +55,37 @@ void Actor::Render()
 
 void Actor::SetPosition(const Vector2& newPosition)
 {
+	//예외처리 (화면 벗어났는지 확인).
+
+	//왼쪽 가장 자리가 화면 왼쪽을 벗어났는지.
+	if (newPosition.x < 0)
+	{
+		return;
+	}
+
+	// 오른쪽 가장자리가 화면 오른쪽을 벗어났는지.
+	if (newPosition.x + width - 1 > Engine::Get().Width())
+	{
+		return;
+	}
+
+	//위쪽 가장자리가 화면의 위를 벗어났는지
+	if (newPosition.y < 0)
+	{
+		return;
+	}
+
+	//화면 아래를 벗어났는지
+	if (newPosition.y - 1 > Engine::Get().Height())
+	{
+		return;
+	}
+
 	if (position == newPosition)
 	{
 		return;
 	}
+
 	//static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	////커서 위치 값 생성
@@ -108,6 +136,9 @@ void Actor::Destroy()
 {
 	//삭제 요청 되었다고 체크
 	isExpired = true;
+
+	//레벨에 삭제 요청을 해야함.
+	owner->DestroyActor(this);
 }
 
 void Actor::QuitGame()

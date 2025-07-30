@@ -30,8 +30,6 @@ public:
 	//레벨 추가 함수
 	void AddLevel(Level* newLevel);
 
-
-
 	//메모리 해제 함수
 	virtual void CleanUp();
 
@@ -40,6 +38,10 @@ public:
 
 	//싱글톤 접근 함수
 	static Engine& Get();
+
+	//화면 가로/세로 크기 반환 함수
+	int Width() const;
+	int Height() const;
 
 private:
 	void BeginPlay();
