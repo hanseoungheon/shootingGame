@@ -4,6 +4,7 @@
 #include "Math/Vector2.h"
 #include "RTTI.h"
 #include <Windows.h>
+#include "Math/Color.h"
 //#include "Input.h"
 //물체 뭘 해야할까?를 정의.
 //위치 점령.
@@ -12,14 +13,6 @@
 //BeginPlay/Tick/Draw.
 
 //색상
-enum class Color : int
-{
-	Blue = 1,
-	Green = 2,
-	Red = 4,
-	White = Red | Green | Blue,
-	Intensity = 8,
-};
 
 //전방선언
 class Level;
@@ -30,7 +23,7 @@ class Engine_API Actor : public RTTI
 
 	RTTI_DECLARATIONS(Actor, RTTI);
 public:
-	Actor(const char image = ' ',Color color = Color::White,
+	Actor(const char* image = " ", Color color = Color::White,
 		const Vector2& position = Vector2::Zero);
 	virtual ~Actor();
 
@@ -51,12 +44,18 @@ public:
 	void SetPosition(const Vector2& newPosition);
 	Vector2 Position() const;
 
+	//문자열 길이 반환
+	int Width() const;
+	
 	//Sorting Order 설정
 	void SetSortingOrder(unsigned int sortingOrder);
 	
 	//오너십 결정
 	void SetOwner(Level* newOwner);
 	Level* GetOwner();
+
+	//객체 삭제 함수
+	void Destroy();
 
 	//게임 종료 요청
 	void QuitGame();
@@ -66,7 +65,11 @@ private:
 	Vector2 position;
 
 	//그릴 값
-	char image = ' ';
+	char* image = nullptr;
+
+	//문자열 길이
+	int width = 0;
+
 
 	//텍스트 색상값
 	Color color;
@@ -76,6 +79,12 @@ private:
 
 	// 정렬 순서
 	unsigned int sortingOrder = 0;
+
+	// 액터가 활성 상태
+	bool isActive = true;
+
+	//삭제 요청됐는지 알려주는 변수
+	bool isExpired = false;
 
 	//소유 레벨.
 	Level* owner = nullptr;

@@ -4,13 +4,21 @@
 #include "Engine.h"
 #include "Utils/Utils.h"
 
-Actor::Actor(const char image,Color color, const Vector2& position) : image(image), color(color) , position(position)
+Actor::Actor(const char* image,Color color, const Vector2& position) :color(color) , position(position)
 {
+	//문자열 길이
+	width = (int)strlen(image);
 
+	//메모리 할당
+	this->image = new char[width + 1];
+
+	//문자열 복사
+	strcpy_s(this->image, width + 1,image);
 }
 Actor::~Actor()
 {
-	
+	//메모리해제
+	SafeDeleteArray(image);
 }
 //이벤트 함수
 
@@ -29,22 +37,16 @@ void Actor::Tick(float deltaTime)
 //그리기 함수
 void Actor::Render()
 {
-	//Win32 API 중 일부
-	//커서 위치 이동
-	//static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-
 	//커서 위치 값 생성
-	COORD coord; 
-	coord.X = (short)position.x;
-	coord.Y = (short)position.y;
+	//COORD coord; 
+	//coord.X = (short)position.x;
+	//coord.Y = (short)position.y;
 
 	//커서이동
-	//SetConsoleCursorPosition(handle, coord);
-	Utils::SetConsolePosition(coord);
+	Utils::SetConsolePosition(position);
 
 	//색상 설정
-	//SetConsoleTextAttribute(handle, (WORD)color);
-	Utils::SetConsoleTextColor(static_cast<WORD>(color));
+	Utils::SetConsoleTextColor(color);
 
 	//그리기
 	std::cout << image;
@@ -52,17 +54,26 @@ void Actor::Render()
 
 void Actor::SetPosition(const Vector2& newPosition)
 {
-	static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (position == newPosition)
+	{
+		return;
+	}
+	//static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	//커서 위치 값 생성
-	COORD coord;
-	coord.X = (short)position.x;
-	coord.Y = (short)position.y;
+	////커서 위치 값 생성
+	//COORD coord;
+	//coord.X = (short)position.x;
+	//coord.Y = (short)position.y;
+
+	//지울 위치 확인
+	Vector2 direction = newPosition - position; //갈 위치 - 현재위치 = 방향벡터
+
+	position.x = (direction.x >= 0) ? position.x : position.x + width - 1;
 
 	//커서이동
-	//SetConsoleCursorPosition(handle, coord);
-	Utils::SetConsolePosition(coord);
+	Utils::SetConsolePosition(position);
 
+	//문자열 길이 고려해서 지울 위치 확인해야함.
 	std::cout << ' ';
 
 	position = newPosition;
@@ -71,6 +82,11 @@ void Actor::SetPosition(const Vector2& newPosition)
 Vector2 Actor::Position() const
 {
 	return position;
+}
+
+int Actor::Width() const
+{
+	return width;
 }
 
 void Actor::SetSortingOrder(unsigned int sortingOrder)
@@ -86,6 +102,12 @@ void Actor::SetOwner(Level* newOwner)
 Level* Actor::GetOwner()
 {
 	return owner;
+}
+
+void Actor::Destroy()
+{
+	//삭제 요청 되었다고 체크
+	isExpired = true;
 }
 
 void Actor::QuitGame()
