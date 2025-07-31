@@ -1,6 +1,6 @@
 #pragma once
 #include "Level/Level.h"
-
+#include "Utils/Timer.h"
 
 /*
 * 게임 레벨의 책임
@@ -26,4 +26,6 @@ public:
 private:
 	//std::vector<Actor*> player;
 
+	//적 생성 시 시간 계산을 위한 타이머
+	Timer enemySpawnTimer;
 };

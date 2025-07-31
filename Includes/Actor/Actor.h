@@ -21,7 +21,8 @@ class Engine_API Actor : public RTTI
 {
 	friend class Level;
 
-	RTTI_DECLARATIONS(Actor, RTTI);
+	RTTI_DECLARATIONS(Actor, RTTI)
+
 public:
 	Actor(const char* image = " ", Color color = Color::White,
 		const Vector2& position = Vector2::Zero);
@@ -89,3 +90,4 @@ protected:
 	//소유 레벨.
 	Level* owner = nullptr;
 };
+

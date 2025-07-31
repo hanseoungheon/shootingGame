@@ -48,6 +48,8 @@ Engine::Engine()
 
 	//엔진 설정 로드
 	LoadEngineSettings();
+
+	srand(static_cast<unsigned int>(time(nullptr)));
 }
 
 Engine::~Engine()
