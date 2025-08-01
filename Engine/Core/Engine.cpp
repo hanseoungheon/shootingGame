@@ -25,7 +25,7 @@ BOOL WINAPI ConsoleMessageProcedure(DWORD CtrlType)
 
 	return false;
 }
-
+	
 Engine::Engine()
 {
 	instance = this;
